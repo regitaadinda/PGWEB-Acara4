@@ -146,7 +146,23 @@
         });
         scale.addTo(map);
 
-       
+        // Geolocation
+        map.locate({
+            setView: true,
+            maxZoom: 16,
+        });
+
+        // Fungsi untuk menampilkan lokasi
+        function onLocationFound(e) {
+            var radius = e.accuracy / 2;
+
+            // Menampilkan marker pada lokasi 
+            L.marker(e.latlng).addTo(map).bindPopup("Anda berada dalam radius " + radius + " meter dari titik ini").openPopup();
+
+            // Menampilkan circle pada lokasi
+            L.circle(e.latlng, radius).addTo(map);
+        }
+
         // Fungsi untuk menampilkan pesan error
         function onLocationError(e) {
             alert(e.message);
@@ -156,4 +172,5 @@
 
     </script>
 </body>
+
 </html>
