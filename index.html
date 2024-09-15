@@ -163,13 +163,14 @@
             L.circle(e.latlng, radius).addTo(map);
         }
 
+        map.on("locationfound", onLocationFound);
+
         // Fungsi untuk menampilkan pesan error
         function onLocationError(e) {
             alert(e.message);
         }
 
         map.on("locationerror", onLocationError);
-
     </script>
 </body>
 
