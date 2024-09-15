@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Leaflet JS</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <style>
+        #map {
+            width: 100%;
+            height: 730px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script>
+        // Inisialisasi peta
+        var map = L.map("map").setView([-6.9899790, 110.4228973], 13);
+
+        // Tile Layer Base Map
+        var osm = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+            attribution:
+                '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        });
+
+        var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+        });
+
+        var rupabumiindonesia = L.tileLayer('https://geoservices.big.go.id/rbi/rest/services/BASEMAP/Rupabumi_Indonesia/MapServer/tile/{z}/{y}/{x}', {
+            attribution: 'Badan Informasi Geospasial'
+        });
+
+
+        // Menambahkan basemap ke dalam peta
+        Esri_WorldImagery.addTo(map);
+
+        // Marker
+        var marker = L.marker([-6.9899790, 110.4228973]);
+        var marker2 = L.marker([-6.9962755, 110.4239273]);
+
+        // Menambahkan marker ke dalam peta
+        marker.addTo(map);
+        marker2.addTo(map);
+
+        // Popup
+        marker.bindPopup("<b>LOKASI</b><br>Titik Semarang");
+        marker.openPopup();
+
+        marker2.bindPopup("<b>LOKASI</b><br>Titik Pleburan");
+        marker2.openPopup();
+
+        // Tooltip
+        marker.bindTooltip("Titik Semarang");
+        marker.openTooltip();
+
+        marker2.bindTooltip("Titik Pleburan");
+        marker2.openTooltip();
+
+        // Circle
+        var circle = L.circle([-6.9899790, 110.4228973], {
+            color: "blue", // warna garis
+            opacity: 1, // opacity garis
+            fillColor: "#abdbe3", // warna fill
+            fillOpacity: 0.5, // opacity fill
+            radius: 1500, // radius dalam meter
+        });
+
+        // Menambahkan circle ke dalam peta
+        circle.addTo(map);
+
+        // Polyline
+        var vertexPolyline = [
+            [-6.9899790, 110.4228973],
+            [-6.9962755, 110.4239273],
+            [-7.0012193, 110.4359436],
+        ];
+        var polyline = L.polyline(vertexPolyline, {
+            color: "#cc0000", // warna garis
+            weight: 3, // ketebalan garis
+            opacity: 1, // opacity garis
+        });
+
+        // Menambahkan polyline ke dalam peta
+        polyline.addTo(map);
+
+        // Polygon
+        var vertexPolygon = [
+            [-6.9829782, 110.4067612],
+            [-6.9826372, 110.4345703],
+            [-7.0012193, 110.4359436],
+            [-7.0022422, 110.4096794],
+            [-6.9817848, 110.4086494]
+        ];
+        var polygon = L.polygon(vertexPolygon, {
+            color: "#ff3399", // warna garis
+            weight: 3, // ketebalan garis
+            opacity: 1, // opacity garis
+            fillColor: "pink", // warna fill
+            fillOpacity: 0.5, // opacity fill
+        });
+
+        // Menambahkan polygon ke dalam peta
+        polygon.addTo(map);
+
+        // Image Overlay
+        var imageUrl = 'data/hillshade_jakarta.png';
+        var imageExtent = [[-6.25, 106.75], [-6.0, 107.0]]; // bottom, left, top, right
+        var imageOverlay = L.imageOverlay(imageUrl, imageExtent, {
+            opacity: 0.7,
+        });
+
+        // Menambahkan image overlay ke dalam peta
+        imageOverlay.addTo(map);
+
+        // Control Layer
+        var baseMaps = {
+            "OpenStreetMap": osm,
+            "Esri World Imagery": Esri_WorldImagery,
+            "Rupa Bumi Indonesia": rupabumiindonesia,
+        };
+
+        var overlayMaps = {
+            "Marker": marker,
+            "Circle": circle,
+            "Polyline": polyline,
+            "Polygon": polygon,
+        };
+
+        var controllayer = L.control.layers(baseMaps, overlayMaps, {
+            collapsed: false,
+        });
+        controllayer.addTo(map);
+
+        // Scale 
+        var scale = L.control.scale({
+            position: "bottomright",
+            imperial: false
+        });
+        scale.addTo(map);
+
+       
+        // Fungsi untuk menampilkan pesan error
+        function onLocationError(e) {
+            alert(e.message);
+        }
+
+        map.on("locationerror", onLocationError);
+
+    </script>
+</body>
+</html>
